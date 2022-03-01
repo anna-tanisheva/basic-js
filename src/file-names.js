@@ -18,89 +18,41 @@ const { NotImplementedError } = require('../extensions/index.js');
 
 function renameFiles(names) {
   let countObj = {};
-  oninputArr = []
-  names.forEach(elem => {
+  outputArr = []
+  names.forEach((elem, i) => {
     if (!countObj[elem]) {
-      countObj[elem] = 1;
+      countObj[elem] = [1, [i]];
     } else {
-      countObj[elem] += 1
+      console.log(countObj[elem][1])
+      countObj[elem][0] += 1;
+      countObj[elem][1].push(i);
     }
   })
   for (i in countObj) {
-    console.log(i)
-    while (countObj[i] > 0) {
-      oninputArr.push(`${i}(${countObj[i]})`)
-      countObj[i]--
+    let count = 0;
+    while (count < countObj[i][0]) {
+      console.log(countObj[i][1][count])
+      if (!outputArr.includes(i)) {
+        outputArr.splice(countObj[i][1][count], 0, `${i}`)
+      } else {
+        outputArr.splice(countObj[i][1][count], 0, `${i}(${count})`)
+      }
+      count++;
     }
   }
-  console.log(oninputArr)
+  outputArr.forEach((elem, index) => {
+    if (elem.indexOf('0') !== -1) {
+      let exp = new RegExp('[0]')
+      console.log(exp)
+      elem = elem.replace(exp, '1')
+      console.log(elem)
+      outputArr[index] = elem
+    }
+  })
+  return outputArr
 }
 
 
 module.exports = {
   renameFiles
 };
-// let countObj = {};
-// names.forEach(elem => {
-//   if (!countObj[elem]) {
-//     countObj[elem] = 1;
-//   } else {
-//     countObj[elem] += 1
-//   }
-// })
-// let keys = Object.keys(countObj);
-
-// console.log(keys)
-// keys.forEach(key => {
-//   let i = 0
-//   while (i < countObj[key]) {
-//     // console.log(key)
-//     if (!outputArr.includes(key)) {
-//       outputArr.push(`${key}`)
-//     } else {
-//       outputArr.push(`${key}(${i})`)
-//     }
-//     i++;
-//   }
-// })
-// outputArr.forEach((elem, index) => {
-//   if (elem.indexOf('0') !== -1) {
-//     let exp = new RegExp('[0]')
-//     console.log(exp)
-//     elem = elem.replace(exp, '1')
-//     console.log(elem)
-//     outputArr[index] = elem
-//   }
-// })
-// // outputArr.sort(function (a, b) {
-// //   return names.indexOf(a) - names.indexOf(b);
-// // });
-
-// let countObj = {};
-// let outputArr = [];
-// names.forEach(elem => {
-//   let k = 1;
-//   if (!countObj[elem]) {
-//     countObj[elem] = 1;
-//   } else {
-//     console.log(elem, k);
-//     // let newElem =
-//     countObj[`${elem}(${k + 1})`] = 1;
-//     k += 1
-//   }
-// })
-// names.forEach((elem) => {
-
-//   if (!outputArr.includes(elem)) {
-//     outputArr.push(elem)
-//   } else {
-//     // let i = 1;
-//     // while (i < countObj[elem]) {
-//     //   // console.log(key)
-//     //   outputArr.push(`${elem}(${i})`)
-//     //   i++;
-//     // }
-//   }
-// })
-// console.log(countObj, outputArr);
-// return outputArr
